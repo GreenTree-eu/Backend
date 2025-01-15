@@ -15,6 +15,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
 
   greentrip:
     build:
@@ -30,6 +31,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-docker:3306/greentrip
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    restart: unless-stopped
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -42,6 +44,7 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   mysql_data:
