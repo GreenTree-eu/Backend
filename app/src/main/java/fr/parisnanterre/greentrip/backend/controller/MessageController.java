@@ -1,13 +1,13 @@
 package fr.parisnanterre.greentrip.backend.controller;
 
 import fr.parisnanterre.greentrip.backend.entity.Message;
-import fr.parisnanterre.greentrip.backend.entity.Role;
 import fr.parisnanterre.greentrip.backend.entity.User;
 import fr.parisnanterre.greentrip.backend.service.MessageService;
 import fr.parisnanterre.greentrip.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +23,9 @@ public class MessageController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     // Envoi d'un message
     @PostMapping
     public ResponseEntity<Message> sendMessage(@RequestBody Message message) {
@@ -37,6 +40,13 @@ public class MessageController {
 
             // Appel du service pour envoyer le message
             Message savedMessage = messageService.sendMessageFromAdminToUser(message);
+
+            // Publier le message aux clients via WebSocket pour chaque destinataire
+            for (User receiver : message.getReceivers()) {
+                // Publier le message sur un topic spécifique à chaque utilisateur
+                messagingTemplate.convertAndSend("/topic/messages/" + receiver.getId(), savedMessage);
+            }
+
             return ResponseEntity.ok(savedMessage);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -67,6 +77,10 @@ public class MessageController {
     public ResponseEntity<Message> sendMessageFromUser(@RequestBody Message message) {
         try {
             Message savedMessage = messageService.sendMessageFromUserToAdmins(message);
+
+            // Publier le message aux admins via WebSocket
+            messagingTemplate.convertAndSend("/topic/messages/admins", savedMessage);
+
             return ResponseEntity.ok(savedMessage);
         } catch (Exception e) {
             e.printStackTrace();
