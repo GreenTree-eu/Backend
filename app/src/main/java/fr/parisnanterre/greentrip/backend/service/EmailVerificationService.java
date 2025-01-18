@@ -1,6 +1,5 @@
 package fr.parisnanterre.greentrip.backend.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -8,8 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class EmailVerificationService {
 
-    @Value("a5d1bb9b98f846608fe8f38a65af95f8")
-    private String apiKey;
+    // Clé API intégrée directement dans la classe
+    private static final String API_KEY = "9b7abc6f7f854d79a8e57ec8095fbff3";
 
     private final RestTemplate restTemplate;
 
@@ -20,20 +19,19 @@ public class EmailVerificationService {
     public boolean verifyEmail(String email) {
         String url = "https://api.zerobounce.net/v2/validate";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("api_key", apiKey)
+                .queryParam("api_key", API_KEY)
                 .queryParam("email", email);
 
         EmailValidationResponse response = restTemplate.getForObject(builder.toUriString(), EmailValidationResponse.class);
         return response != null && "valid".equals(response.getStatus());
     }
 
-    // Add EmailValidationResponse class inside this service to capture the JSON response from ZeroBounce
+    // Classe interne pour capturer la réponse JSON de l'API ZeroBounce
     static class EmailValidationResponse {
         private String status;
         private String subStatus;
         private Boolean freeEmail;
         private String smtpProvider;
-        // include other fields as needed
 
         public String getStatus() {
             return status;
@@ -43,7 +41,28 @@ public class EmailVerificationService {
             this.status = status;
         }
 
-        // getters and setters for other fields
+        public String getSubStatus() {
+            return subStatus;
+        }
+
+        public void setSubStatus(String subStatus) {
+            this.subStatus = subStatus;
+        }
+
+        public Boolean getFreeEmail() {
+            return freeEmail;
+        }
+
+        public void setFreeEmail(Boolean freeEmail) {
+            this.freeEmail = freeEmail;
+        }
+
+        public String getSmtpProvider() {
+            return smtpProvider;
+        }
+
+        public void setSmtpProvider(String smtpProvider) {
+            this.smtpProvider = smtpProvider;
+        }
     }
 }
-

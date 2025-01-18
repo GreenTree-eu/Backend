@@ -29,11 +29,25 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api-docs/swagger-config", "/api-docs").permitAll() // On permet l'accès à "/"
-            .requestMatchers("/api/v1/auth/**").permitAll()
-            .requestMatchers("/api/v1/messages/**").permitAll()
-            .requestMatchers("/api/v1/support/**").hasAuthority("ADMIN")
-            .requestMatchers("/api/v1/user/me", "/api/v1/auth/logout").authenticated()
+            .requestMatchers(
+                    "/",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html",
+                    "/api-docs/swagger-config",
+                    "/api-docs",
+                    "/api/v1/auth/**",
+                    "/api/v1/messages/**"
+                    ).permitAll() // On permet l'accès à "/"
+            .requestMatchers(
+                    "/api/v1/support/**"
+            ).hasAuthority("ADMIN")
+            .requestMatchers(
+                    "/api/v1/user/me",
+                    "/api/v1/auth/logout",
+                    "/api/v1/trips/**",
+                    "/api/v1/waypoints/**"
+            ).authenticated()
             .anyRequest().authenticated()
             )
 

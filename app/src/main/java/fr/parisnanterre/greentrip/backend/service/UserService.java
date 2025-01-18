@@ -21,4 +21,9 @@ public class UserService {
     public List<User> findAllAdmins() {
         return userRepository.findByRole("ADMIN");
     }
+
+    public User findUserById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null);
+    }
 }

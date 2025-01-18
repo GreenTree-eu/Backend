@@ -31,9 +31,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
-        if (!emailVerificationService.verifyEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Invalid email address.");
-        }
+        //if (!emailVerificationService.verifyEmail(request.getEmail())) {
+        //    throw new IllegalArgumentException("Invalid email address.");
+        //}
 
         var user = new User(
                 request.getFirstName(),
