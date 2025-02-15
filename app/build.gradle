@@ -103,11 +103,11 @@ version = "0.0.1" // Version
 application {
     mainClass = 'fr.parisnanterre.greentrip.backend.App'
 }
-
+/*
 // Edit the build task to generate the asciidoc pdf too
 tasks.named('asciidoctor').configure {
     dependsOn tasks.named('asciidoctorPdf')
 }
 tasks.named('build').configure {
     dependsOn tasks.named('asciidoctor')
-}
+}*/

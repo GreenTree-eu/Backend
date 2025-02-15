@@ -45,8 +45,8 @@ public class SecurityConfiguration {
             .requestMatchers(
                     "/api/v1/user/me",
                     "/api/v1/auth/logout",
-                    "/api/v1/trips/**",
-                    "/api/v1/waypoints/**"
+                    "/api/trips/**",
+                    "/api/waypoints/**"
             ).authenticated()
             .anyRequest().authenticated()
             )

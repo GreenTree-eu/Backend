@@ -6,6 +6,7 @@ import fr.parisnanterre.greentrip.backend.entity.User;
 import fr.parisnanterre.greentrip.backend.entity.Waypoint;
 import fr.parisnanterre.greentrip.backend.service.TripService;
 import fr.parisnanterre.greentrip.backend.service.UserService;
+import fr.parisnanterre.greentrip.backend.service.WaypointService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,12 @@ public class TripController {
 
     private final TripService tripService;
     private final UserService userService;
+    private final WaypointService waypointService;
 
-    public TripController(TripService tripService, UserService userService) {
+    public TripController(TripService tripService, UserService userService, WaypointService waypointService) {
         this.tripService = tripService;
         this.userService = userService;
+        this.waypointService = waypointService;
     }
 
     @GetMapping("/{userId}")
@@ -39,7 +42,7 @@ public class TripController {
 
         // Récupérer les données depuis TripRequest
         String tripName = tripRequest.getName();
-        List<Waypoint> waypoints = tripRequest.getWaypoints();
+        List<Waypoint> waypoints = tripRequest. getWaypoints();
 
         // Sauvegarder le trajet
         Trip trip = tripService.saveTrip(userId, tripName, waypoints);
